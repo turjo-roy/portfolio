@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turjo Roy — Engineering Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0C0C0E;
+  --bg2:#111115;
+  --card:#16161C;
+  --border:#222228;
+  --text:#F0EEE8;
+  --muted:#888880;
+  --hint:#444440;
+  --gold:#C8A96E;
+  --gold2:#E8C98E;
+  --accent:#4A7C59;
+  --accent2:#6DAF82;
+  --red:#D45C4A;
+  --display:'Fraunces',serif;
+  --body:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+
+/* ── NOISE OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
+
+/* ── CURSOR ── */
+.cursor{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s;mix-blend-mode:difference}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(200,169,110,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .18s ease;mix-blend-mode:normal}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid transparent;transition:.3s}
+nav.scrolled{background:rgba(12,12,14,.85);border-color:var(--border);backdrop-filter:blur(20px)}
+.nav-logo{font-family:var(--display);font-size:22px;font-weight:900;color:var(--gold);letter-spacing:-.02em;text-decoration:none}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;transition:.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--gold);color:#0C0C0E;font-size:12px;font-weight:600;padding:8px 20px;border-radius:2px;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;transition:.2s}
+.nav-cta:hover{background:var(--gold2)}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;padding:120px 48px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% 40%,rgba(74,124,89,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 20% 80%,rgba(200,169,110,.05) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:60px 60px}
+.hero-content{position:relative;max-width:900px}
+.hero-eyebrow{font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--gold)}
+.hero-name{font-family:var(--display);font-size:clamp(56px,8vw,96px);font-weight:900;line-height:.95;letter-spacing:-.03em;margin-bottom:12px}
+.hero-name em{font-style:italic;font-weight:300;color:var(--gold)}
+.hero-title{font-family:var(--display);font-size:clamp(28px,4vw,48px);font-weight:300;font-style:italic;color:var(--muted);margin-bottom:28px;line-height:1.1}
+.hero-desc{font-size:16px;color:var(--muted);max-width:540px;line-height:1.8;margin-bottom:48px;font-weight:300}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+.btn-primary{background:var(--gold);color:#0C0C0E;padding:14px 32px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:.2s;border:none;cursor:pointer}
+.btn-primary:hover{background:var(--gold2);transform:translateY(-2px)}
+.btn-outline{border:1px solid var(--border);color:var(--muted);padding:14px 32px;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:.2s}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.hero-stats{position:absolute;right:48px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:32px}
+.stat{text-align:right}
+.stat-n{font-family:var(--display);font-size:48px;font-weight:900;color:var(--gold);line-height:1}
+.stat-l{font-size:11px;color:var(--hint);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--hint);font-size:11px;letter-spacing:.15em;text-transform:uppercase}
+.scroll-line{width:1px;height:48px;background:linear-gradient(var(--gold),transparent);animation:scrollAnim 2s ease-in-out infinite}
+@keyframes scrollAnim{0%,100%{opacity:.3;transform:scaleY(.5) translateY(-10px)}50%{opacity:1;transform:scaleY(1) translateY(0)}}
+
+/* ── SECTIONS ── */
+section{padding:100px 48px}
+.section-label{font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.section-label::before{content:'';width:24px;height:1px;background:var(--gold)}
+.section-title{font-family:var(--display);font-size:clamp(36px,5vw,56px);font-weight:900;letter-spacing:-.02em;line-height:1.05;margin-bottom:60px}
+.section-title em{font-style:italic;font-weight:300;color:var(--muted)}
+
+/* ── ABOUT ── */
+#about{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.about-text p{font-size:16px;color:var(--muted);line-height:1.9;margin-bottom:20px;font-weight:300}
+.about-text p strong{color:var(--text);font-weight:500}
+.about-cards{display:flex;flex-direction:column;gap:16px}
+.about-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:20px 24px;display:flex;align-items:center;gap:16px;transition:.2s}
+.about-card:hover{border-color:var(--gold);transform:translateX(4px)}
+.about-card-icon{font-size:24px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(--bg);border-radius:4px;flex-shrink:0}
+.about-card-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+.about-card-sub{font-size:12px;color:var(--muted)}
+
+/* ── PROJECTS ── */
+#projects{background:var(--bg)}
+.projects-grid{display:grid;gap:2px}
+.project-card{background:var(--card);border:1px solid var(--border);padding:48px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:start;transition:.3s;position:relative;overflow:hidden}
+.project-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);transform:scaleY(0);transform-origin:bottom;transition:.3s}
+.project-card:hover{border-color:var(--gold);background:var(--bg2)}
+.project-card:hover::before{transform:scaleY(1)}
+.project-card.featured{grid-template-columns:1fr;background:linear-gradient(135deg,#141420,#101018)}
+.project-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.2);padding:4px 12px;border-radius:2px;margin-bottom:20px}
+.project-title{font-family:var(--display);font-size:28px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px;line-height:1.2}
+.project-desc{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:24px;max-width:600px;font-weight:300}
+.project-tech{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.tech-chip{font-size:11px;font-weight:500;color:var(--muted);background:var(--bg);border:1px solid var(--border);padding:4px 12px;border-radius:2px;letter-spacing:.04em}
+.project-links{display:flex;gap:12px}
+.project-link{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:6px;transition:.2s}
+.project-link:hover{color:var(--gold2)}
+.project-link.secondary{color:var(--muted)}
+.project-link.secondary:hover{color:var(--text)}
+.project-meta{text-align:right;flex-shrink:0}
+.project-year{font-family:var(--display);font-size:40px;font-weight:900;color:var(--hint);line-height:1}
+.featured-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.featured-highlights{display:flex;flex-direction:column;gap:16px}
+.highlight{display:flex;gap:14px;align-items:flex-start}
+.highlight-icon{width:32px;height:32px;background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px}
+.highlight-text{font-size:13px;color:var(--muted);line-height:1.7}
+.highlight-text strong{color:var(--text);display:block;font-size:14px;margin-bottom:2px}
+
+/* ── SKILLS ── */
+#skills{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.skill-group{background:var(--card);border:1px solid var(--border);padding:32px;transition:.2s}
+.skill-group:hover{border-color:var(--gold)}
+.skill-group-title{font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.skill-list{display:flex;flex-direction:column;gap:10px}
+.skill-item{display:flex;align-items:center;justify-content:space-between}
+.skill-name{font-size:13px;color:var(--text);font-weight:400}
+.skill-bar-wrap{width:80px;height:2px;background:var(--border);border-radius:2px;overflow:hidden}
+.skill-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform 1s ease}
+.skill-bar.animated{transform:scaleX(1)}
+
+/* ── EXPERIENCE ── */
+#experience{background:var(--bg)}
+.timeline{display:flex;flex-direction:column;gap:0}
+.timeline-item{display:grid;grid-template-columns:200px 1fr;gap:48px;padding:40px 0;border-bottom:1px solid var(--border);position:relative}
+.timeline-item:last-child{border:none}
+.timeline-item::before{content:'';position:absolute;left:199px;top:0;bottom:0;width:1px;background:var(--border)}
+.timeline-dot{position:absolute;left:193px;top:44px;width:13px;height:13px;border-radius:50%;background:var(--bg2);border:2px solid var(--border);transition:.2s;z-index:1}
+.timeline-item:hover .timeline-dot{border-color:var(--gold);background:var(--gold)}
+.timeline-left{text-align:right;padding-right:48px}
+.timeline-year{font-family:var(--display);font-size:14px;font-weight:700;color:var(--gold)}
+.timeline-org{font-size:12px;color:var(--hint);margin-top:4px}
+.timeline-right{padding-left:48px}
+.timeline-title{font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px}
+.timeline-desc{font-size:14px;color:var(--muted);line-height:1.8;font-weight:300}
+
+/* ── CONTACT ── */
+#contact{background:var(--bg2);border-top:1px solid var(--border)}
+.contact-inner{max-width:700px}
+.contact-title{font-family:var(--display);font-size:clamp(36px,5vw,64px);font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:24px}
+.contact-title em{font-style:italic;font-weight:300;color:var(--gold)}
+.contact-sub{font-size:16px;color:var(--muted);margin-bottom:48px;font-weight:300;line-height:1.8}
+.contact-links{display:flex;gap:16px;flex-wrap:wrap}
+.contact-link{display:flex;align-items:center;gap:10px;padding:14px 24px;border:1px solid var(--border);border-radius:2px;text-decoration:none;color:var(--muted);font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;transition:.2s}
+.contact-link:hover{border-color:var(--gold);color:var(--gold)}
+.contact-link svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* ── FOOTER ── */
+footer{padding:32px 48px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.footer-logo{font-family:var(--display);font-size:18px;font-weight:900;color:var(--gold)}
+.footer-text{font-size:12px;color:var(--hint);letter-spacing:.06em}
+
+/* ── ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:16px 24px}
+  #hero{padding:100px 24px 80px}
+  .hero-stats{display:none}
+  section{padding:72px 24px}
+  .about-grid{grid-template-columns:1fr}
+  .skills-grid{grid-template-columns:1fr}
+  .timeline-item{grid-template-columns:1fr;gap:8px}
+  .timeline-item::before,.timeline-dot{display:none}
+  .timeline-left{text-align:left;padding:0}
+  .timeline-right{padding:0}
+  .featured-grid{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:8px;text-align:center}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" href="#">TR</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="#contact">Get in touch</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Engineering Portfolio</div>
+    <h1 class="hero-name">Turjo<br><em>Roy</em></h1>
+    <p class="hero-title">Production & Industrial Engineer<br>& Full-Stack Developer</p>
+    <p class="hero-desc">B.E. student at Jadavpur University. Siemens Scholar. I build things that work — from precision mechanical components to production web platforms serving thousands of students.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#projects">View Projects</a>
+      <a class="btn-outline" href="Turjo_Roy_CV.pdf" download>Download CV</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-n">500+</div><div class="stat-l">Students Served</div></div>
+    <div class="stat"><div class="stat-n">3+</div><div class="stat-l">Years Engineering</div></div>
+    <div class="stat"><div class="stat-n">2</div><div class="stat-l">Certifications</div></div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">Who I Am</div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm a <strong>Production Engineering student</strong> at Jadavpur University, Kolkata — one of India's most prestigious technical institutions. I was awarded the <strong>Siemens Scholarship</strong> for academic excellence and technical potential.</p>
+      <p>My work sits at the intersection of <strong>mechanical engineering and software development</strong>. I design precision components in Siemens NX, program PLCs for industrial automation, and build full-stack web applications that solve real problems.</p>
+      <p>In 2026, I launched <strong>Unmukt Shiksha</strong> — a free education platform now serving 500+ students across India preparing for JEE, NEET, Board exams, and Diploma programs. It features AI-powered tutoring, real-time messaging, and a complete admin system.</p>
+    </div>
+    <div class="about-cards">
+      <div class="about-card reveal reveal-delay-1">
+        <div class="about-card-icon">🎓</div>
+        <div><div class="about-card-title">Jadavpur University</div><div class="about-card-sub">B.E. Production Engineering · Expected 2027</div></div>
+      </div>
+      <div class="about-card reveal reveal-delay-2">
+        <div class="about-card-icon">🏆</div>
+        <div><div class="about-card-title">Siemens Scholar</div><div class="about-card-sub">Scholarship for academic excellence</div></div>
+      </div>
+      <div class="about-card reveal reveal-delay-3">
+        <div class="about-card-icon">🏭</div>
+        <div><div class="about-card-title">Siemens SITRAIN Certified</div><div class="about-card-sub">PLC & Industrial Automation · Nashik</div></div>
+      </div>
+      <div class="about-card reveal">
+        <div class="about-card-icon">📍</div>
+        <div><div class="about-card-title">Kolkata, West Bengal</div><div class="about-card-sub">Open to relocation & remote work</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">What I've Built</div>
+  <div class="section-title">Selected <em>Projects</em></div>
+
+  <div class="projects-grid">
+
+    <!-- Unmukt Shiksha — Featured -->
+    <div class="project-card featured reveal">
+      <div class="project-tag">⭐ Featured Project</div>
+      <div class="featured-grid">
+        <div>
+          <h3 class="project-title">Unmukt Shiksha</h3>
+          <p class="project-desc">A free, AI-powered education platform for Indian students preparing for JEE, NEET, Board exams, and Diploma programs. Built entirely from scratch and deployed to production — serving 500+ real students.</p>
+          <div class="project-tech">
+            <span class="tech-chip">Node.js</span>
+            <span class="tech-chip">Supabase (PostgreSQL)</span>
+            <span class="tech-chip">Claude AI</span>
+            <span class="tech-chip">Gemini API</span>
+            <span class="tech-chip">JWT Auth</span>
+            <span class="tech-chip">Vercel</span>
+            <span class="tech-chip">Netlify</span>
+            <span class="tech-chip">REST API</span>
+          </div>
+          <div class="project-links">
+            <a class="project-link" href="https://unmuktshiksha.netlify.app/app.html" target="_blank">↗ Live Demo</a>
+            <a class="project-link secondary" href="https://github.com/turjoroy/unmukt-shiksha" target="_blank">⌥ GitHub</a>
+          </div>
+        </div>
+        <div class="featured-highlights">
+          <div class="highlight">
+            <div class="highlight-icon">💬</div>
+            <div class="highlight-text"><strong>Real-time Messaging</strong>Group chats, direct messaging, block/report system with 4-second live polling</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-icon">🤖</div>
+            <div class="highlight-text"><strong>AI Study Tutor "Vidya"</strong>Claude-powered tutoring with subject-specific responses in Hinglish</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-icon">🛡️</div>
+            <div class="highlight-text"><strong>AI Content Moderation</strong>Automatic approval/rejection of student-submitted videos and materials</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-icon">📊</div>
+            <div class="highlight-text"><strong>Full Admin Panel</strong>Student analytics, points system, ban management, Google Drive import</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-icon">🔐</div>
+            <div class="highlight-text"><strong>Production Security</strong>OTP email verification, JWT auth, row-level security in Supabase</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Green Supply Chain -->
+    <div class="project-card reveal">
+      <div>
+        <div class="project-tag">📄 Research Paper</div>
+        <h3 class="project-title">Green Supply Chain Management in Manufacturing Technology</h3>
+        <p class="project-desc">Academic term paper analyzing sustainable supply chain strategies in manufacturing — covering carbon footprint reduction, sustainable sourcing, reverse logistics, lean-green integration, and ISO 14001 compliance frameworks.</p>
+        <div class="project-tech">
+          <span class="tech-chip">Supply Chain Management</span>
+          <span class="tech-chip">ISO 14001</span>
+          <span class="tech-chip">Lean Manufacturing</span>
+          <span class="tech-chip">SPC</span>
+        </div>
+      </div>
+      <div class="project-meta"><div class="project-year">2024</div></div>
+    </div>
+
+    <!-- SPC Framework -->
+    <div class="project-card reveal">
+      <div>
+        <div class="project-tag">📐 Engineering</div>
+        <h3 class="project-title">SPC-Based Material Evaluation Framework</h3>
+        <p class="project-desc">Developed a Statistical Process Control framework for primary material quality evaluation. Applied control charts, Cp/Cpk capability indices, and trend analysis to identify process deviations before defects occur.</p>
+        <div class="project-tech">
+          <span class="tech-chip">SPC</span>
+          <span class="tech-chip">Control Charts</span>
+          <span class="tech-chip">Cp/Cpk Analysis</span>
+          <span class="tech-chip">MS Excel</span>
+          <span class="tech-chip">Quality Engineering</span>
+        </div>
+      </div>
+      <div class="project-meta"><div class="project-year">2024</div></div>
+    </div>
+
+    <!-- CAD -->
+    <div class="project-card reveal">
+      <div>
+        <div class="project-tag">🔧 CAD / Design</div>
+        <h3 class="project-title">Precision CAD Modeling</h3>
+        <p class="project-desc">3D mechanical component modeling projects including iPhone geometry replication and parametric tyre design — built using Siemens NX with full GD&T compliance and manufacturability analysis.</p>
+        <div class="project-tech">
+          <span class="tech-chip">Siemens NX</span>
+          <span class="tech-chip">AutoCAD</span>
+          <span class="tech-chip">3D Modeling</span>
+          <span class="tech-chip">GD&T</span>
+          <span class="tech-chip">Parametric Design</span>
+        </div>
+      </div>
+      <div class="project-meta"><div class="project-year">2023</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">What I Know</div>
+  <div class="section-title">Technical <em>Skills</em></div>
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Engineering</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-name">Siemens NX / AutoCAD</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="90"></div></div></div>
+        <div class="skill-item"><span class="skill-name">PLC Programming (TIA Portal)</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="80"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Statistical Process Control</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="85"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Precision Measurement</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="90"></div></div></div>
+        <div class="skill-item"><span class="skill-name">ISO Standards</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="75"></div></div></div>
+      </div>
+    </div>
+    <div class="skill-group reveal reveal-delay-1">
+      <div class="skill-group-title">Software Development</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-name">JavaScript / Node.js</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="85"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Python / C / C++</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="75"></div></div></div>
+        <div class="skill-item"><span class="skill-name">REST APIs / Supabase</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="85"></div></div></div>
+        <div class="skill-item"><span class="skill-name">HTML / CSS</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="90"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Git / Vercel / Netlify</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="80"></div></div></div>
+      </div>
+    </div>
+    <div class="skill-group reveal reveal-delay-2">
+      <div class="skill-group-title">Tools & Methods</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-name">Claude / Gemini APIs</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="80"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Advanced MS Excel</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="85"></div></div></div>
+        <div class="skill-item"><span class="skill-name">SOP Writing</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="80"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Technical Reporting</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="85"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Bengali / English / Hindi</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="95"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Where I've Worked</div>
+  <div class="section-title">Experience &amp; <em>Training</em></div>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-left">
+        <div class="timeline-year">2025–2026</div>
+        <div class="timeline-org">Nashik, India</div>
+      </div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-right">
+        <div class="timeline-title">Industrial Automation Training (Certified) — Siemens SITRAIN</div>
+        <div class="timeline-desc">Completed certified training in industrial automation and production systems — specializing in PLC programming using TIA Portal, industrial automation, and Siemens hardware. Gained hands-on experience in real manufacturing environments.</div>
+      </div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-left">
+        <div class="timeline-year">2024</div>
+        <div class="timeline-org">India</div>
+      </div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-right">
+        <div class="timeline-title">Industrial Internship — New Allenberry Works</div>
+        <div class="timeline-desc">Analyzed industrial gear manufacturing processes (Hobbing, Shaping). Applied ISO tolerance standards to ensure precision output. Identified process inefficiencies and proposed corrective actions that reduced scrap during the observation period.</div>
+      </div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-left">
+        <div class="timeline-year">2023–Present</div>
+        <div class="timeline-org">Kolkata, India</div>
+      </div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-right">
+        <div class="timeline-title">Engineering Lab Associate — Jadavpur University</div>
+        <div class="timeline-desc">Operated lathe, milling, and shaping machines to achieve precise tolerances. Conducted precision measurements using Vernier calipers and micrometers. Documented results for quality assurance reporting and process optimization.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-label">Get in Touch</div>
+    <h2 class="contact-title">Let's work<br><em>together</em></h2>
+    <p class="contact-sub">Whether it's a manufacturing project, software collaboration, or just a conversation — I'm always open to interesting opportunities.</p>
+    <div class="contact-links">
+      <a class="contact-link" href="/cdn-cgi/l/email-protection#413534332b2e332e387371717001262c20282d6f222e2c">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email
+      </a>
+      <a class="contact-link" href="https://linkedin.com/in/turjo-roy0502" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a class="contact-link" href="https://github.com/turjoroy" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a class="contact-link" href="Turjo_Roy_CV.pdf" download>
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download CV
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">TR</div>
+  <div class="footer-text">© 2026 Turjo Roy · Kolkata, India</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+});
+function animRing(){
+  rx+=(mx-rx)*.15; ry+=(my-ry)*.15;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.style.transform='translate(-50%,-50%) scale(1.8)');
+  el.addEventListener('mouseleave',()=>ring.style.transform='translate(-50%,-50%) scale(1)');
+});
+
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.1});
+reveals.forEach(el=>obs.observe(el));
+
+// Skill bars
+const skillObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.skill-bar').forEach(bar=>{
+        bar.style.transform=`scaleX(${bar.dataset.width/100})`;
+        bar.classList.add('ani
