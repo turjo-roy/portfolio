@@ -228,6 +228,7 @@ footer{padding:32px 48px;border-top:1px solid var(--border);display:flex;align-i
 <!-- ABOUT -->
 <section id="about">
   <div class="section-label">Who I Am</div>
+  <div class="section-title">About <em>Me</em></div>
   <div class="about-grid">
     <div class="about-text reveal">
       <p>I'm a <strong>Production Engineering student</strong> at Jadavpur University, Kolkata — one of India's most prestigious technical institutions. I was awarded the <strong>Siemens Scholarship</strong> for academic excellence and technical potential.</p>
@@ -510,4 +511,20 @@ const skillObs = new IntersectionObserver(entries=>{
     if(e.isIntersecting){
       e.target.querySelectorAll('.skill-bar').forEach(bar=>{
         bar.style.transform=`scaleX(${bar.dataset.width/100})`;
-        bar.classList.add('ani
+        bar.classList.add('animated');
+      });
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.skill-group').forEach(el=>skillObs.observe(el));
+
+// Trigger reveals already in viewport on load
+setTimeout(()=>{
+  reveals.forEach(el=>{
+    const rect = el.getBoundingClientRect();
+    if(rect.top < window.innerHeight) el.classList.add('visible');
+  });
+}, 100);
+</script>
+</body>
+</html>
